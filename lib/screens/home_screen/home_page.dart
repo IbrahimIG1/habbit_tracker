@@ -1,76 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:habbit_tracker/core/cubit/cubit/app_cubit.dart';
+import 'package:habbit_tracker/core/cubit/cubit/app_state.dart';
 import 'package:habbit_tracker/screens/home_screen/widgets/habbit_card.dart';
-
-import 'widgets/habbit_timer.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
-
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> list = [
-      {
-        "habbit_name": "Exersice",
-        "start": false,
-        "start_time": "0",
-        "goal_time": "10"
-      },
-      {
-        "habbit_name": "Read",
-        "start": false,
-        "start_time": "0",
-        "goal_time": "10"
-      },
-      {
-        "habbit_name": "Wirte",
-        "start": false,
-        "start_time": "0",
-        "goal_time": "10"
-      },
-      {
-        "habbit_name": "Pray",
-        "is_start": false,
-        "start_time": "0",
-        "goal_time": "10"
-      },
-    ];
-    void habbitStart(int index) {
-      list[index]['is_start'] = !list[index]['is_start'];
-    }
+    // void habbitStart(int index) {
+    //   print('click start');
 
-    void settingOpen(int index) {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text("Setting for ${list[index]["habbit_name"]}"),
-            );
-          });
-    }
+    //   print("befor click ${list[index]['is_start']}");
+
+    //   list[index]['is_start'] = !list[index]['is_start'];
+    //   print("after click ${list[index]['is_start']}");
+    // }
+
+    // void settingOpen(int index) {
+    //   showDialog(
+    //       context: context,
+    //       builder: (context) {
+    //         return AlertDialog(
+    //           title: Text("Setting for ${list[index]["habbit_name"]}"),
+    //         );
+    //       });
+    // }
 
     return Scaffold(
         appBar: AppBar(
           title: const Text('consistencey is key.'),
           centerTitle: false,
         ),
-        body: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                  itemCount: list.length,
-                  itemBuilder: (context, index) {
-                    return HabbitCard(
-                      index: index,
-                      habbitName: list[index]["habbit_name"],
-                      startTime: list[index]["habbit_name"],
-                      goalTime: list[index]["habbit_name"],
-                      settingsOpen: () => settingOpen(index),
-                      habbitStart: () =>habbitStart(index),
-                      isStrat: list[index]["is_start"],
-                    );
-                  }),
-            )
-          ],
+        body: BlocConsumer<AppCubit, AppCubitState>(
+          listener: (context, state) {},
+          builder: (context, state) {
+            var appCubit = AppCubit.get(context);
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: appCubit.list.length,
+                      itemBuilder: (context, index) {
+                        return HabbitCard(
+                          index: index,
+                          habbitName: appCubit.list[index]["habbit_name"],
+                          startTime: appCubit.list[index]["start_time"],
+                          goalTime: appCubit.list[index]["goal_time"],
+                          settingsOpen: () {
+                            appCubit.settingOpen(index, context);
+                          },
+                          habbitStart: () {
+                            appCubit.playAndPause(index);
+                          },
+                          isStart: appCubit.list[index]["is_start"],
+                        );
+                      }),
+                )
+              ],
+            );
+          },
         ));
   }
 }

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class HabbitName extends StatelessWidget {
   final String habbitName;
-  final String startTime;
-  final String goalTime;
+  final int startTime;
+  final int goalTime;
    const HabbitName({super.key,required this.habbitName, required this.startTime, required this.goalTime});
 
   @override

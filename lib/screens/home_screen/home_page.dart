@@ -43,6 +43,7 @@ class HomePage extends StatelessWidget {
                       itemCount: appCubit.list.length,
                       itemBuilder: (context, index) {
                         return HabbitCard(
+                          
                           index: index,
                           habbitName: appCubit.list[index]["habbit_name"],
                           startTime: appCubit.list[index]["start_time"],

@@ -37,12 +37,16 @@ class AppCubit extends Cubit<AppCubitState> {
 
   IconData startAndPauseIcon = Icons.play_arrow_rounded;
   void playAndPause(int index) {
-    // change icon (play and pause)
-    // if (list[index]["start_time"] == list[index]["goal_time"]) {
-    //   startAndPauseIcon = Icons.play_arrow_rounded;
-    // }
-    list[index]["is_start"] = !list[index]["is_start"];
-    habbitTimerPlay(index);
+    if (list[index]["start_time"] / 60 == list[index]["goal_time"]) {
+      print("Repeat agian...");
+      repeatHabbitAgain(index);
+    } else {
+      list[index]["is_start"] = !list[index]["is_start"];
+      print("is_start is => ${list[index]["is_start"]}");
+    }
+    if (list[index]["is_start"]) {
+      habbitTimerPlay(index);
+    }
     emit(PlayAndPauseState());
   }
 
@@ -59,31 +63,48 @@ class AppCubit extends Cubit<AppCubitState> {
   }
 
   void habbitTimerPlay(int index) {
-    // time when button clicked
     DateTime startTime = DateTime.now();
     int elapsedTime = list[index]['start_time'];
     Timer.periodic(const Duration(seconds: 1), (timer) {
       // time counter every 1 second
       DateTime currentTime = DateTime.now();
-      print(startTime.minute);
-      if (list[index]['is_start']) {
-        // this Calculation to not get muins number and added {elapsedTime} to not starrt from 0 again
+      if (list[index]["start_time"] / 60 == list[index]["goal_time"]) {
+        timeIsDone(index, timer);
+        emit(TimerPlayState());
+      } else if (list[index]['is_start']) {
         list[index]['start_time'] = elapsedTime +
             currentTime.second -
             startTime.second +
             60 * (currentTime.minute - startTime.minute) +
             60 * 60 * (currentTime.hour - startTime.hour);
-      } else {
-        startAndPauseIcon = Icons.play_arrow_rounded;
-        timer.cancel();
         emit(TimerPlayState());
+      } else {
+        timer.cancel();
       }
-      emit(TimerPlayState());
     });
   }
 
-  calculatPrecentage(int index) {
-    var result = list[index]['start_time'] / (list[index]['time_goal'] * 60);
-    return result * 100;
+  /// this Calculation to not get timer number as seconds and added [elapsedTime] to not start from 0 again
+  timerCalculation(
+      int index, int elapsedTime, currentTime, DateTime startTime) {
+    list[index]['start_time'] = elapsedTime +
+        currentTime.second -
+        startTime.second +
+        60 * (currentTime.minute - startTime.minute) +
+        60 * 60 * (currentTime.hour - startTime.hour);
+  }
+
+  /// use to pause timer when time = 100 % ;
+  timeIsDone(int index, Timer timer) {
+    list[index]["is_start"] = false;
+    startAndPauseIcon = Icons.play_arrow_rounded;
+    timer.cancel();
+  }
+
+  /// repeate habbit one more after done 100 %
+  repeatHabbitAgain(int index) {
+    list[index]["is_start"] = true;
+    list[index]["start_time"] = 0;
+    startAndPauseIcon = Icons.pause_rounded;
   }
 }

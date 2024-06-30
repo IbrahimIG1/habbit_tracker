@@ -8,25 +8,6 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key});
   @override
   Widget build(BuildContext context) {
-    // void habbitStart(int index) {
-    //   print('click start');
-
-    //   print("befor click ${list[index]['is_start']}");
-
-    //   list[index]['is_start'] = !list[index]['is_start'];
-    //   print("after click ${list[index]['is_start']}");
-    // }
-
-    // void settingOpen(int index) {
-    //   showDialog(
-    //       context: context,
-    //       builder: (context) {
-    //         return AlertDialog(
-    //           title: Text("Setting for ${list[index]["habbit_name"]}"),
-    //         );
-    //       });
-    // }
-
     return Scaffold(
         appBar: AppBar(
           title: const Text('consistencey is key.'),
@@ -43,7 +24,6 @@ class HomePage extends StatelessWidget {
                       itemCount: appCubit.list.length,
                       itemBuilder: (context, index) {
                         return HabbitCard(
-                          
                           index: index,
                           habbitName: appCubit.list[index]["habbit_name"],
                           startTime: appCubit.list[index]["start_time"],

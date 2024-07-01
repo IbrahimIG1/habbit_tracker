@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:habbit_tracker/screens/home_screen/widgets/button_default.dart';
+import 'package:habbit_tracker/screens/home_screen/widgets/text_form_feild_default.dart';
 import 'app_state.dart';
 
 class AppCubit extends Cubit<AppCubitState> {
@@ -15,24 +17,14 @@ class AppCubit extends Cubit<AppCubitState> {
       "start_time": 0,
       "goal_time": 1
     },
-    {
-      "habbit_name": "Read",
-      "is_start": false,
-      "start_time": 0,
-      "goal_time": 10
-    },
+    {"habbit_name": "Read", "is_start": false, "start_time": 0, "goal_time": 1},
     {
       "habbit_name": "Wirte",
       "is_start": false,
       "start_time": 0,
-      "goal_time": 10
+      "goal_time": 1
     },
-    {
-      "habbit_name": "Pray",
-      "is_start": false,
-      "start_time": 0,
-      "goal_time": 10
-    },
+    {"habbit_name": "Pray", "is_start": false, "start_time": 0, "goal_time": 1},
   ];
 
   IconData startAndPauseIcon = Icons.play_arrow_rounded;
@@ -55,7 +47,37 @@ class AppCubit extends Cubit<AppCubitState> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("setting for ${list[index]["habbit_name"]}"),
+          title: Container(
+            height: 230,
+            width: 200,
+            child: Column(
+              children: [
+                TextFormFeildDefault(
+                    hintText: 'Habit name',
+                    controller: TextEditingController()),
+                SizedBox(height: 15),
+                TextFormFeildDefault(
+                    hintText: 'Time', controller: TextEditingController()),
+                Row(
+                  children: [
+                    Expanded(
+                        child: ButtonDefault(
+                            text: "reset",
+                            onPressedFunction: () {
+                              print('reset');
+                            })),
+                    SizedBox(width: 15),
+                    Expanded(
+                        child: ButtonDefault(
+                            text: "Save",
+                            onPressedFunction: () {
+                              print("save");
+                            })),
+                  ],
+                ),
+              ],
+            ),
+          ),
         );
       },
     );

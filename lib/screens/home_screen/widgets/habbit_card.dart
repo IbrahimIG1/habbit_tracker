@@ -7,10 +7,10 @@ class HabbitCard extends StatelessWidget {
   final int goalTime;
   final VoidCallback settingsOpen;
   final VoidCallback habbitStart;
-  late bool isStart;
+  final bool isStart;
   final int index;
 
-  HabbitCard({
+  const HabbitCard({
     super.key,
     required this.index,
     required this.habbitName,
@@ -41,9 +41,7 @@ class HabbitCard extends StatelessWidget {
 
     calculatPrecentage() {
       var result = startTime / (goalTime * 60);
-      if (result * 100 == 100) {
-        isStart = false;
-      }
+
       return result;
     }
 
